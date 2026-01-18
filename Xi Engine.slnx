@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Xi Engine.vcxproj" Id="bf400b30-2077-4d00-9b74-0da8dc9e774d" />
+</Solution>
