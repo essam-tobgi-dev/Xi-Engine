@@ -10,6 +10,7 @@
 #include "../Editor/EditorUI.h"
 
 #include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
 namespace Xi {
 
@@ -89,21 +90,45 @@ namespace Xi {
             OnUpdate(dt);
             m_World->Update(dt);
 
-            // Rendering
-            glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-            m_Renderer->BeginFrame();
-            m_World->Render(*m_Renderer);
-            OnRender();
-            m_Renderer->EndFrame();
-
             // Editor UI
             if (m_EditorMode && m_Editor) {
+                // Handle framebuffer resize BEFORE rendering
+                m_Editor->UpdateSceneViewport();
+
+                // Sync editor camera to renderer BEFORE rendering
+                m_Renderer->SetCamera(m_Editor->GetEditorCamera());
+
+                // Render scene to framebuffer
+                m_Editor->BeginSceneRender();
+
+                m_Renderer->BeginFrame();
+                m_World->Render(*m_Renderer);
+                OnRender();
+                m_Renderer->EndFrame();
+
+                m_Editor->EndSceneRender();
+
+                // Restore main framebuffer and clear for ImGui
+                int windowWidth, windowHeight;
+                glfwGetFramebufferSize(m_Window->GetNativeWindow(), &windowWidth, &windowHeight);
+                glViewport(0, 0, windowWidth, windowHeight);
+                glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+                // Render ImGui
                 m_Editor->BeginFrame();
-                m_Editor->Render(*m_World);
+                m_Editor->Render(*m_World, *m_Renderer);
                 OnImGui();
                 m_Editor->EndFrame();
+            } else {
+                // Non-editor mode: render directly to screen
+                glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+                m_Renderer->BeginFrame();
+                m_World->Render(*m_Renderer);
+                OnRender();
+                m_Renderer->EndFrame();
             }
 
             m_Window->SwapBuffers();

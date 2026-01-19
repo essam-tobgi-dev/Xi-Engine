@@ -137,6 +137,20 @@ namespace Xi {
     }
 
     void GameApplication::OnUpdate(float dt) {
+        (void)dt;
+
+        // Handle escape to quit
+        if (Input::IsKeyPressed(KeyCode::Escape)) {
+            Quit();
+        }
+    }
+
+    void GameApplication::OnFixedUpdate(float dt) {
+        (void)dt;
+        // Fixed timestep physics updates are handled by Application
+    }
+
+    void GameApplication::OnRender() {
         World& world = GetWorld();
         Renderer& renderer = GetRenderer();
 
@@ -145,7 +159,6 @@ namespace Xi {
         auto* transformPool = world.GetComponentPool<Transform>();
 
         if (lightPool && transformPool) {
-            renderer.ClearLights();
             for (Entity entity : lightPool->GetEntities()) {
                 if (!world.HasComponent<Transform>(entity)) continue;
 
@@ -168,6 +181,7 @@ namespace Xi {
         // Submit mesh renderers to the render queue
         auto* meshPool = world.GetComponentPool<MeshRenderer>();
         if (meshPool && transformPool) {
+            int submitted = 0;
             for (Entity entity : meshPool->GetEntities()) {
                 if (!world.HasComponent<Transform>(entity)) continue;
                 if (!world.IsEntityActive(entity)) continue;
@@ -177,23 +191,13 @@ namespace Xi {
 
                 if (mr.visible && mr.mesh && mr.material) {
                     renderer.Submit(mr.mesh, mr.material, t.GetMatrix());
+                    submitted++;
                 }
             }
+            // Log once per second to avoid spam
+            static float logTimer = 0.0f;
+            logTimer += 0.016f;
         }
-
-        // Handle escape to quit
-        if (Input::IsKeyPressed(KeyCode::Escape)) {
-            Quit();
-        }
-    }
-
-    void GameApplication::OnFixedUpdate(float dt) {
-        (void)dt;
-        // Fixed timestep physics updates are handled by Application
-    }
-
-    void GameApplication::OnRender() {
-        // Additional rendering can be done here
     }
 
     void GameApplication::OnImGui() {

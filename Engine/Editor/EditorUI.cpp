@@ -1,5 +1,6 @@
 #include "EditorUI.h"
 #include "../ECS/World.h"
+#include "../Renderer/Renderer.h"
 #include "../Core/Time.h"
 #include "../Core/Input.h"
 #include "../Core/Log.h"
@@ -16,7 +17,7 @@ namespace Xi {
     EditorUI::EditorUI() {
         m_EditorCamera.SetPerspective(60.0f, 16.0f / 9.0f, 0.1f, 1000.0f);
         m_EditorCamera.SetPosition(glm::vec3(0.0f, 5.0f, 10.0f));
-        m_EditorCamera.SetRotation(glm::vec3(-20.0f, 0.0f, 0.0f));
+        m_EditorCamera.SetRotation(glm::vec3(20.0f, 0.0f, 0.0f));  // Pitch down 20 degrees, yaw 0 (look towards -Z)
     }
 
     EditorUI::~EditorUI() = default;
@@ -33,14 +34,59 @@ namespace Xi {
         ImGui_ImplGlfw_InitForOpenGL(window, true);
         ImGui_ImplOpenGL3_Init("#version 450");
 
+        // Create scene framebuffer
+        FramebufferSpec fbSpec;
+        fbSpec.width = 1280;
+        fbSpec.height = 720;
+        m_SceneFramebuffer = std::make_unique<Framebuffer>(fbSpec);
+
         XI_LOG_INFO("Editor UI initialized");
         return true;
     }
 
     void EditorUI::Shutdown() {
+        m_SceneFramebuffer.reset();
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
+    }
+
+    void EditorUI::BeginSceneRender() {
+        m_SceneFramebuffer->Bind();
+
+        // Ensure proper OpenGL state for 3D rendering
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LESS);
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
+        glFrontFace(GL_CCW);
+
+        // Use a distinct color (dark blue) so we can tell if framebuffer is displayed
+        glClearColor(0.05f, 0.05f, 0.15f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }
+
+    void EditorUI::EndSceneRender() {
+        m_SceneFramebuffer->Unbind();
+    }
+
+    void EditorUI::UpdateSceneViewport() {
+        // This should be called before scene rendering to handle resize
+        // We use the cached viewport size from the previous frame
+        // On first frame, it uses the default 1280x720
+
+        uint32_t fbWidth = m_SceneFramebuffer->GetWidth();
+        uint32_t fbHeight = m_SceneFramebuffer->GetHeight();
+
+        if ((uint32_t)m_SceneViewportSize.x != fbWidth ||
+            (uint32_t)m_SceneViewportSize.y != fbHeight) {
+
+            if (m_SceneViewportSize.x > 0 && m_SceneViewportSize.y > 0) {
+                m_SceneFramebuffer->Resize((uint32_t)m_SceneViewportSize.x,
+                                           (uint32_t)m_SceneViewportSize.y);
+                m_EditorCamera.SetAspectRatio(m_SceneViewportSize.x / m_SceneViewportSize.y);
+            }
+        }
     }
 
     void EditorUI::BeginFrame() {
@@ -54,7 +100,7 @@ namespace Xi {
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     }
 
-    void EditorUI::Render(World& world) {
+    void EditorUI::Render(World& world, Renderer& renderer) {
         DrawMenuBar(world);
         DrawToolbar();
 
@@ -79,6 +125,7 @@ namespace Xi {
         }
 
         // Scene viewport
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
         ImGui::Begin("Scene");
 
         // Right-click to control camera
@@ -92,15 +139,22 @@ namespace Xi {
 
         UpdateEditorCamera(Time::GetDeltaTime());
 
-        ImVec2 size = ImGui::GetContentRegionAvail();
-        if (size.x > 0 && size.y > 0) {
-            m_EditorCamera.SetAspectRatio(size.x / size.y);
+        // Sync editor camera to renderer (for next frame)
+        renderer.SetCamera(m_EditorCamera);
+
+        // Get current viewport size and cache it for next frame's resize
+        ImVec2 viewportSize = ImGui::GetContentRegionAvail();
+        if (viewportSize.x > 0 && viewportSize.y > 0) {
+            // Update cached size for next frame's resize (before rendering)
+            m_SceneViewportSize = { viewportSize.x, viewportSize.y };
+
+            // Display the framebuffer texture (flip UV vertically for OpenGL)
+            uint32_t textureID = m_SceneFramebuffer->GetColorAttachment();
+            ImGui::Image((ImTextureID)(uintptr_t)textureID, viewportSize, ImVec2(0, 1), ImVec2(1, 0));
         }
 
-        ImGui::Text("Scene View - Right-click to control camera");
-        ImGui::Text("WASD to move, Mouse to look, Q/E for up/down");
-
         ImGui::End();
+        ImGui::PopStyleVar();
     }
 
     void EditorUI::SetupImGuiStyle() {

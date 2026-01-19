@@ -4,13 +4,16 @@
 #include "Inspector.h"
 #include "Console.h"
 #include "../Renderer/Camera.h"
+#include "../Renderer/Framebuffer.h"
 #include <memory>
+#include <glm/glm.hpp>
 
 struct GLFWwindow;
 
 namespace Xi {
 
     class World;
+    class Renderer;
 
     class EditorUI {
     public:
@@ -23,9 +26,17 @@ namespace Xi {
         void BeginFrame();
         void EndFrame();
 
-        void Render(World& world);
+        void Render(World& world, Renderer& renderer);
+
+        void BeginSceneRender();
+        void EndSceneRender();
+
+        void UpdateSceneViewport();  // Call before rendering to handle resize
 
         Camera& GetEditorCamera() { return m_EditorCamera; }
+        Framebuffer* GetSceneFramebuffer() { return m_SceneFramebuffer.get(); }
+
+        glm::vec2 GetSceneViewportSize() const { return m_SceneViewportSize; }
 
     private:
         void SetupImGuiStyle();
@@ -39,6 +50,8 @@ namespace Xi {
         Console m_Console;
 
         Camera m_EditorCamera;
+        std::unique_ptr<Framebuffer> m_SceneFramebuffer;
+        glm::vec2 m_SceneViewportSize = { 1280.0f, 720.0f };
 
         bool m_ShowHierarchy = true;
         bool m_ShowInspector = true;

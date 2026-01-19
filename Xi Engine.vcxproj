@@ -158,6 +158,7 @@
     <ClCompile Include="Engine\Renderer\RenderQueue.cpp" />
     <ClCompile Include="Engine\Renderer\Primitives.cpp" />
     <ClCompile Include="Engine\Renderer\Renderer.cpp" />
+    <ClCompile Include="Engine\Renderer\Framebuffer.cpp" />
     <!-- Engine Physics -->
     <ClCompile Include="Engine\Physics\PhysicsWorld.cpp" />
     <!-- Engine Audio -->
@@ -212,6 +213,7 @@
     <ClInclude Include="Engine\Renderer\RenderQueue.h" />
     <ClInclude Include="Engine\Renderer\Primitives.h" />
     <ClInclude Include="Engine\Renderer\Renderer.h" />
+    <ClInclude Include="Engine\Renderer\Framebuffer.h" />
     <!-- Engine Physics Headers -->
     <ClInclude Include="Engine\Physics\Collision.h" />
     <ClInclude Include="Engine\Physics\Collider.h" />
