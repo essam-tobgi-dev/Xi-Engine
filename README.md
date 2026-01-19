@@ -1,5 +1,7 @@
 # Xi Engine
 
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/c73da522-c35c-419c-bb57-5753cc143d53" />
+
 A modern, lightweight 3D game engine built with C++20 and OpenGL 4.5.
 
 ## Overview
@@ -36,6 +38,12 @@ Xi Engine is a cross-platform game engine designed for real-time 3D applications
 - **MiniAudio Backend** - Cross-platform audio playback
 - **Audio Sources** - Positional audio components
 - **Audio Clips** - Sound asset management
+
+## Demo
+
+<img width="757" height="450" alt="xi" src="https://github.com/user-attachments/assets/0d81d29e-26f7-46ed-951b-a36124aab375" />
+
+https://github.com/user-attachments/assets/879ba0b3-0a62-4773-9b56-8ccb670f8a19
 
 ## Project Structure
 
@@ -78,8 +86,8 @@ Xi Engine/
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/xi-engine.git
-   cd xi-engine
+   git clone https://github.com/essam-tobgi-dev/Xi-Engine.git
+   cd Xi-Engine
    ```
 
 2. Open `Xi Engine.sln` in Visual Studio 2022
