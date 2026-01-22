@@ -169,6 +169,14 @@
     <ClCompile Include="Engine\Editor\SceneHierarchy.cpp" />
     <ClCompile Include="Engine\Editor\Inspector.cpp" />
     <ClCompile Include="Engine\Editor\EditorUI.cpp" />
+    <ClCompile Include="Engine\Editor\ScriptEditor.cpp" />
+    <!-- Engine Scripting -->
+    <ClCompile Include="Engine\Scripting\ScriptValue.cpp" />
+    <ClCompile Include="Engine\Scripting\ScriptLexer.cpp" />
+    <ClCompile Include="Engine\Scripting\ScriptParser.cpp" />
+    <ClCompile Include="Engine\Scripting\ScriptInterpreter.cpp" />
+    <ClCompile Include="Engine\Scripting\ScriptEngine.cpp" />
+    <ClCompile Include="Engine\Scripting\ScriptSystem.cpp" />
     <!-- Engine Resources -->
     <ClCompile Include="Engine\Resources\ResourceManager.cpp" />
     <ClCompile Include="Engine\Resources\SceneSerializer.cpp" />
@@ -204,6 +212,7 @@
     <ClInclude Include="Engine\ECS\Components\Collider.h" />
     <ClInclude Include="Engine\ECS\Components\RigidBody.h" />
     <ClInclude Include="Engine\ECS\Components\AudioSource.h" />
+    <ClInclude Include="Engine\ECS\Components\Script.h" />
     <!-- Engine Renderer Headers -->
     <ClInclude Include="Engine\Renderer\Shader.h" />
     <ClInclude Include="Engine\Renderer\Texture.h" />
@@ -226,6 +235,15 @@
     <ClInclude Include="Engine\Editor\SceneHierarchy.h" />
     <ClInclude Include="Engine\Editor\Inspector.h" />
     <ClInclude Include="Engine\Editor\EditorUI.h" />
+    <ClInclude Include="Engine\Editor\ScriptEditor.h" />
+    <!-- Engine Scripting Headers -->
+    <ClInclude Include="Engine\Scripting\ScriptValue.h" />
+    <ClInclude Include="Engine\Scripting\ScriptLexer.h" />
+    <ClInclude Include="Engine\Scripting\ScriptParser.h" />
+    <ClInclude Include="Engine\Scripting\ScriptAST.h" />
+    <ClInclude Include="Engine\Scripting\ScriptInterpreter.h" />
+    <ClInclude Include="Engine\Scripting\ScriptEngine.h" />
+    <ClInclude Include="Engine\Scripting\ScriptSystem.h" />
     <!-- Engine Resources Headers -->
     <ClInclude Include="Engine\Resources\ResourceManager.h" />
     <ClInclude Include="Engine\Resources\SceneSerializer.h" />

@@ -8,6 +8,8 @@
 #include "../Physics/PhysicsWorld.h"
 #include "../Audio/AudioEngine.h"
 #include "../Editor/EditorUI.h"
+#include "../Scripting/ScriptEngine.h"
+#include "../Scripting/ScriptSystem.h"
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -56,6 +58,11 @@ namespace Xi {
 
         m_Renderer->Init();
         m_Audio->Init();
+
+        // Initialize scripting system
+        m_ScriptEngine = std::make_unique<ScriptEngine>();
+        m_ScriptEngine->Init(m_World.get());
+        m_ScriptSystem = m_World->AddSystem<ScriptSystem>(m_ScriptEngine.get());
 
         if (m_EditorMode) {
             m_Editor = std::make_unique<EditorUI>();
@@ -117,7 +124,7 @@ namespace Xi {
 
                 // Render ImGui
                 m_Editor->BeginFrame();
-                m_Editor->Render(*m_World, *m_Renderer);
+                m_Editor->Render(*m_World, *m_Renderer, m_ScriptSystem, m_ScriptEngine.get());
                 OnImGui();
                 m_Editor->EndFrame();
             } else {
@@ -140,8 +147,18 @@ namespace Xi {
 
         OnShutdown();
 
+        // Stop scripts before shutdown
+        if (m_ScriptSystem && m_Editor && m_Editor->IsPlayMode()) {
+            m_ScriptSystem->StopScripts(*m_World);
+        }
+
         if (m_Editor) {
             m_Editor->Shutdown();
+        }
+
+        // Shutdown scripting
+        if (m_ScriptEngine) {
+            m_ScriptEngine->Shutdown();
         }
 
         m_Audio->Shutdown();
@@ -152,6 +169,7 @@ namespace Xi {
         m_Physics.reset();
         m_Audio.reset();
         m_Editor.reset();
+        m_ScriptEngine.reset();
 
         Input::Shutdown();
         m_Window->Shutdown();

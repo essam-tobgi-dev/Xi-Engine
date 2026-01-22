@@ -10,6 +10,8 @@ namespace Xi {
     class PhysicsWorld;
     class AudioEngine;
     class EditorUI;
+    class ScriptEngine;
+    class ScriptSystem;
 
     class Application {
     public:
@@ -49,6 +51,8 @@ namespace Xi {
         std::unique_ptr<PhysicsWorld> m_Physics;
         std::unique_ptr<AudioEngine> m_Audio;
         std::unique_ptr<EditorUI> m_Editor;
+        std::unique_ptr<ScriptEngine> m_ScriptEngine;
+        ScriptSystem* m_ScriptSystem = nullptr;
 
         bool m_Running = true;
         bool m_EditorMode = true;

@@ -1,6 +1,9 @@
 #include "EditorUI.h"
 #include "../ECS/World.h"
+#include "../ECS/Components/Script.h"
 #include "../Renderer/Renderer.h"
+#include "../Scripting/ScriptSystem.h"
+#include "../Scripting/ScriptEngine.h"
 #include "../Core/Time.h"
 #include "../Core/Input.h"
 #include "../Core/Log.h"
@@ -100,16 +103,16 @@ namespace Xi {
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     }
 
-    void EditorUI::Render(World& world, Renderer& renderer) {
+    void EditorUI::Render(World& world, Renderer& renderer, ScriptSystem* scriptSystem, ScriptEngine* engine) {
         DrawMenuBar(world);
-        DrawToolbar();
+        DrawToolbar(world, scriptSystem);
 
         if (m_ShowHierarchy) {
             m_Hierarchy.Draw(world);
         }
 
         if (m_ShowInspector) {
-            m_Inspector.Draw(world, m_Hierarchy.GetSelectedEntity());
+            m_Inspector.Draw(world, m_Hierarchy.GetSelectedEntity(), &m_ScriptEditor);
         }
 
         if (m_ShowConsole) {
@@ -118,6 +121,10 @@ namespace Xi {
 
         if (m_ShowStats) {
             DrawStats();
+        }
+
+        if (m_ShowScriptEditor) {
+            m_ScriptEditor.Draw(world, scriptSystem, engine);
         }
 
         if (m_ShowDemo) {
@@ -258,6 +265,7 @@ namespace Xi {
                 ImGui::MenuItem("Inspector", nullptr, &m_ShowInspector);
                 ImGui::MenuItem("Console", nullptr, &m_ShowConsole);
                 ImGui::MenuItem("Stats", nullptr, &m_ShowStats);
+                ImGui::MenuItem("Script Editor", nullptr, &m_ShowScriptEditor);
                 ImGui::Separator();
                 ImGui::MenuItem("ImGui Demo", nullptr, &m_ShowDemo);
                 ImGui::EndMenu();
@@ -284,19 +292,42 @@ namespace Xi {
         }
     }
 
-    void EditorUI::DrawToolbar() {
+    void EditorUI::DrawToolbar(World& world, ScriptSystem* scriptSystem) {
         ImGui::Begin("Toolbar", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
 
-        if (ImGui::Button("Play")) {
-            XI_LOG_INFO("Play mode started");
+        if (!m_PlayMode) {
+            // Play button (green tint when not playing)
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.5f, 0.2f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.6f, 0.3f, 1.0f));
+            if (ImGui::Button("Play")) {
+                m_PlayMode = true;
+                if (scriptSystem) {
+                    scriptSystem->StartScripts(world);
+                }
+                XI_LOG_INFO("Play mode started");
+            }
+            ImGui::PopStyleColor(2);
+        } else {
+            // Stop button (red tint when playing)
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.5f, 0.2f, 0.2f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.6f, 0.3f, 0.3f, 1.0f));
+            if (ImGui::Button("Stop")) {
+                m_PlayMode = false;
+                if (scriptSystem) {
+                    scriptSystem->StopScripts(world);
+                }
+                XI_LOG_INFO("Play mode stopped");
+            }
+            ImGui::PopStyleColor(2);
         }
+
         ImGui::SameLine();
-        if (ImGui::Button("Pause")) {
-            XI_LOG_INFO("Paused");
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("Stop")) {
-            XI_LOG_INFO("Stopped");
+
+        // Status indicator
+        if (m_PlayMode) {
+            ImGui::TextColored(ImVec4(0.3f, 0.9f, 0.3f, 1.0f), "PLAYING");
+        } else {
+            ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "STOPPED");
         }
 
         ImGui::End();

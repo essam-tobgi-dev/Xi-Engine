@@ -1,4 +1,5 @@
 #include "Inspector.h"
+#include "ScriptEditor.h"
 #include "../ECS/World.h"
 #include "../ECS/Components/Transform.h"
 #include "../ECS/Components/MeshRenderer.h"
@@ -8,6 +9,7 @@
 #include "../ECS/Components/Collider.h"
 #include "../ECS/Components/RigidBody.h"
 #include "../ECS/Components/AudioSource.h"
+#include "../ECS/Components/Script.h"
 #include "../Renderer/Material.h"
 
 #include <imgui.h>
@@ -19,7 +21,7 @@ namespace Xi {
     Inspector::Inspector() = default;
     Inspector::~Inspector() = default;
 
-    void Inspector::Draw(World& world, Entity entity) {
+    void Inspector::Draw(World& world, Entity entity, ScriptEditor* scriptEditor) {
         ImGui::Begin("Inspector");
 
         if (entity == INVALID_ENTITY) {
@@ -53,6 +55,7 @@ namespace Xi {
         DrawCollider(world, entity);
         DrawRigidBody(world, entity);
         DrawAudioSource(world, entity);
+        DrawScript(world, entity, scriptEditor);
 
         ImGui::Separator();
 
@@ -346,7 +349,102 @@ namespace Xi {
                     world.AddComponent<AudioSource>(entity);
                 }
             }
+            if (!world.HasComponent<ScriptComponent>(entity)) {
+                if (ImGui::MenuItem("Script")) {
+                    auto& script = world.AddComponent<ScriptComponent>(entity);
+                    // Add default WASD movement script template
+                    script.source = "-- Script for " + world.GetEntityName(entity) + "\n"
+                                   "local speed = 5\n"
+                                   "\n"
+                                   "function OnStart()\n"
+                                   "    Log.Info(\"Movement enabled - use WASD\")\n"
+                                   "end\n"
+                                   "\n"
+                                   "function OnUpdate(dt)\n"
+                                   "    local moveSpeed = speed * dt\n"
+                                   "    \n"
+                                   "    if Input.IsKeyDown(Key.W) then\n"
+                                   "        Translate(0, 0, -moveSpeed)\n"
+                                   "    end\n"
+                                   "    if Input.IsKeyDown(Key.S) then\n"
+                                   "        Translate(0, 0, moveSpeed)\n"
+                                   "    end\n"
+                                   "    if Input.IsKeyDown(Key.A) then\n"
+                                   "        Translate(-moveSpeed, 0, 0)\n"
+                                   "    end\n"
+                                   "    if Input.IsKeyDown(Key.D) then\n"
+                                   "        Translate(moveSpeed, 0, 0)\n"
+                                   "    end\n"
+                                   "end\n";
+                }
+            }
             ImGui::EndPopup();
+        }
+    }
+
+    void Inspector::DrawScript(World& world, Entity entity, ScriptEditor* scriptEditor) {
+        if (!world.HasComponent<ScriptComponent>(entity)) return;
+
+        if (ImGui::CollapsingHeader("Script", ImGuiTreeNodeFlags_DefaultOpen)) {
+            ScriptComponent& script = world.GetComponent<ScriptComponent>(entity);
+
+            // Status indicators
+            if (script.initialized) {
+                ImGui::TextColored(ImVec4(0.3f, 0.9f, 0.3f, 1.0f), "Status: Running");
+            } else if (script.hasError) {
+                ImGui::TextColored(ImVec4(0.9f, 0.3f, 0.3f, 1.0f), "Status: Error");
+            } else {
+                ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "Status: Idle");
+            }
+
+            // Error display
+            if (script.hasError && !script.lastError.empty()) {
+                ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.4f, 0.4f, 1.0f));
+                ImGui::TextWrapped("Error: %s", script.lastError.c_str());
+                ImGui::PopStyleColor();
+            }
+
+            // Script preview (first few lines)
+            ImGui::Text("Source Preview:");
+            ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.05f, 0.05f, 0.08f, 1.0f));
+            ImGui::BeginChild("ScriptPreview", ImVec2(0, 80), true);
+
+            // Show first few lines of script
+            std::string preview = script.source;
+            if (preview.length() > 200) {
+                preview = preview.substr(0, 200) + "...";
+            }
+            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.7f, 0.7f, 0.7f, 1.0f));
+            ImGui::TextWrapped("%s", preview.c_str());
+            ImGui::PopStyleColor();
+
+            ImGui::EndChild();
+            ImGui::PopStyleColor();
+
+            // Edit button - opens script editor
+            if (scriptEditor) {
+                if (ImGui::Button("Edit Script")) {
+                    scriptEditor->SetEditingEntity(entity);
+                    scriptEditor->LoadFromEntity(world);
+                }
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Open in Script Editor");
+                }
+            }
+
+            ImGui::SameLine();
+
+            // Clear script
+            if (ImGui::Button("Clear")) {
+                script.Clear();
+            }
+
+            ImGui::SameLine();
+
+            // Remove component
+            if (ImGui::Button("Remove##Script")) {
+                world.RemoveComponent<ScriptComponent>(entity);
+            }
         }
     }
 

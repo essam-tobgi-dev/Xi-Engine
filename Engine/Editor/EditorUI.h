@@ -3,6 +3,7 @@
 #include "SceneHierarchy.h"
 #include "Inspector.h"
 #include "Console.h"
+#include "ScriptEditor.h"
 #include "../Renderer/Camera.h"
 #include "../Renderer/Framebuffer.h"
 #include <memory>
@@ -14,6 +15,8 @@ namespace Xi {
 
     class World;
     class Renderer;
+    class ScriptSystem;
+    class ScriptEngine;
 
     class EditorUI {
     public:
@@ -26,7 +29,7 @@ namespace Xi {
         void BeginFrame();
         void EndFrame();
 
-        void Render(World& world, Renderer& renderer);
+        void Render(World& world, Renderer& renderer, ScriptSystem* scriptSystem, ScriptEngine* engine);
 
         void BeginSceneRender();
         void EndSceneRender();
@@ -38,16 +41,24 @@ namespace Xi {
 
         glm::vec2 GetSceneViewportSize() const { return m_SceneViewportSize; }
 
+        // Play mode control
+        bool IsPlayMode() const { return m_PlayMode; }
+        void SetPlayMode(bool play) { m_PlayMode = play; }
+
+        // Access to script editor
+        ScriptEditor& GetScriptEditor() { return m_ScriptEditor; }
+
     private:
         void SetupImGuiStyle();
         void DrawMenuBar(World& world);
-        void DrawToolbar();
+        void DrawToolbar(World& world, ScriptSystem* scriptSystem);
         void DrawStats();
         void UpdateEditorCamera(float dt);
 
         SceneHierarchy m_Hierarchy;
         Inspector m_Inspector;
         Console m_Console;
+        ScriptEditor m_ScriptEditor;
 
         Camera m_EditorCamera;
         std::unique_ptr<Framebuffer> m_SceneFramebuffer;
@@ -57,7 +68,10 @@ namespace Xi {
         bool m_ShowInspector = true;
         bool m_ShowConsole = true;
         bool m_ShowStats = true;
+        bool m_ShowScriptEditor = false;
         bool m_ShowDemo = false;
+
+        bool m_PlayMode = false;
 
         // Editor camera control
         bool m_CameraActive = false;
