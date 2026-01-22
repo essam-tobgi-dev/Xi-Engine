@@ -2,7 +2,9 @@
 
 <img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/c73da522-c35c-419c-bb57-5753cc143d53" />
 
-A modern, lightweight 3D game engine built with C++20 and OpenGL 4.5.
+A modern, lightweight 3D game engine built with C++20 and OpenGL 4.5. 
+
+[Download](https://github.com/essam-tobgi-dev/Xi-Engine/releases/tag/xi-engine)
 
 ## Overview
 
