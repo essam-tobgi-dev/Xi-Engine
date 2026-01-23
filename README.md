@@ -24,6 +24,69 @@ Xi Engine is a cross-platform game engine designed for real-time 3D applications
 - **Render Queue** - Automatic sorting for opaque and transparent objects
 - **Framebuffer Support** - Off-screen rendering for editor viewports
 
+  Here’s a small **README section** you can add (clean and simple, suitable for docs or a repo):
+
+---
+
+### Lua Scripting Support in Xi Engine
+
+<img width="1911" height="1095" alt="image" src="https://github.com/user-attachments/assets/661f70c5-b430-43e0-a772-eb6f39af0173" />
+
+Xi Engine now supports **Lua scripting** for game development 🎉
+This allows developers to quickly prototype and build gameplay logic using simple, lightweight scripts.
+
+With Lua scripting, you can:
+
+* Control object movement and behavior
+* Handle input (keyboard, mouse, controller)
+* Update game logic every frame
+* React to events like start, update, and collisions
+* Build full game mechanics without recompiling the engine
+
+#### Example
+
+```lua
+-- Script for Cube 1
+-- This script allows the cube to move using WASD keys
+
+local speed = 5  -- Movement speed (units per second)
+
+-- Called once when the script starts
+function OnStart()
+    -- Print a message to the console to inform the user
+    Log.Info("Movement enabled - use WASD")
+end
+
+-- Called every frame
+-- dt = delta time (time passed since last frame)
+function OnUpdate(dt)
+    -- Calculate movement distance based on frame time
+    local moveSpeed = speed * dt
+    
+    -- Move forward when W is pressed
+    if Input.IsKeyDown(Key.W) then
+        Translate(0, 0, -moveSpeed)
+    end
+
+    -- Move backward when S is pressed
+    if Input.IsKeyDown(Key.S) then
+        Translate(0, 0, moveSpeed)
+    end
+
+    -- Move left when A is pressed
+    if Input.IsKeyDown(Key.A) then
+        Translate(-moveSpeed, 0, 0)
+    end
+
+    -- Move right when D is pressed
+    if Input.IsKeyDown(Key.D) then
+        Translate(moveSpeed, 0, 0)
+    end
+end
+```
+
+Lua scripts are attached directly to game objects, making iteration fast and flexible for both developers and designers.
+
 ### Editor
 - **ImGui Integration** - Immediate mode GUI for editor tools
 - **Scene Hierarchy** - Visual tree view of all entities
