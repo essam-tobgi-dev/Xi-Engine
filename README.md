@@ -1,10 +1,12 @@
 # Xi Engine
 
-<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/c73da522-c35c-419c-bb57-5753cc143d53" />
+<img width="600" height="1024" alt="image" src="https://github.com/user-attachments/assets/c73da522-c35c-419c-bb57-5753cc143d53" />
+
+<img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/c9e2e79b-bc80-4f5e-9322-41eb0a1f6ef7" />
 
 A modern, lightweight 3D game engine built with C++20 and OpenGL 4.5. 
 
-[Download](https://github.com/essam-tobgi-dev/Xi-Engine/releases/tag/xi-engine)
+[Download](https://github.com/essam-tobgi-dev/Xi-Engine/releases/tag/xi-engine-lua)
 
 ## Overview
 
