@@ -71,10 +71,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)vendor\glew\include;$(SolutionDir)vendor\glfw\include;$(SolutionDir)vendor\imgui;$(SolutionDir)vendor\imgui\backends;$(SolutionDir)vendor\glm;$(SolutionDir)vendor\stb;$(SolutionDir)vendor\miniaudio;$(SolutionDir)vendor\nlohmann;$(SolutionDir);$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)vendor\glew\include;$(SolutionDir)vendor\glfw\include;$(SolutionDir)vendor\imgui;$(SolutionDir)vendor\imgui\backends;$(SolutionDir)vendor\glm;$(SolutionDir)vendor\stb;$(SolutionDir)vendor\miniaudio;$(SolutionDir)vendor\nlohmann;$(SolutionDir)vendor\ImGuiColorTextEdit;$(SolutionDir);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)vendor\glew\include;$(SolutionDir)vendor\glfw\include;$(SolutionDir)vendor\imgui;$(SolutionDir)vendor\imgui\backends;$(SolutionDir)vendor\glm;$(SolutionDir)vendor\stb;$(SolutionDir)vendor\miniaudio;$(SolutionDir)vendor\nlohmann;$(SolutionDir);$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)vendor\glew\include;$(SolutionDir)vendor\glfw\include;$(SolutionDir)vendor\imgui;$(SolutionDir)vendor\imgui\backends;$(SolutionDir)vendor\glm;$(SolutionDir)vendor\stb;$(SolutionDir)vendor\miniaudio;$(SolutionDir)vendor\nlohmann;$(SolutionDir)vendor\ImGuiColorTextEdit;$(SolutionDir);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -188,6 +188,8 @@
     <ClCompile Include="vendor\imgui\imgui_widgets.cpp" />
     <ClCompile Include="vendor\imgui\backends\imgui_impl_glfw.cpp" />
     <ClCompile Include="vendor\imgui\backends\imgui_impl_opengl3.cpp" />
+    <!-- ImGuiColorTextEdit -->
+    <ClCompile Include="vendor\ImGuiColorTextEdit\TextEditor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <!-- Game Headers -->
@@ -247,6 +249,8 @@
     <!-- Engine Resources Headers -->
     <ClInclude Include="Engine\Resources\ResourceManager.h" />
     <ClInclude Include="Engine\Resources\SceneSerializer.h" />
+    <!-- ImGuiColorTextEdit Headers -->
+    <ClInclude Include="vendor\ImGuiColorTextEdit\TextEditor.h" />
   </ItemGroup>
   <ItemGroup>
     <!-- Shaders -->
