@@ -9,6 +9,7 @@
 #include <memory>
 #include <string>
 #include <functional>
+#include <algorithm>
 
 namespace Xi {
 

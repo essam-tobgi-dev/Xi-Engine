@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xi Engine - Modern C++ Game Engine</title>
+    <link rel="stylesheet" href="landing.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-text">Xi Engine</span>
+            </div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#architecture">Architecture</a>
+                <a href="#showcase">Showcase</a>
+                <a href="tutorial.html">Documentation</a>
+                <a href="https://github.com/essam-tobgi-dev/Xi-Engine/releases/tag/xi-engine-lua" class="btn-download">Download</a>
+                <a href="https://github.com/essam-tobgi-dev/Xi-Engine" class="github-link" target="_blank" aria-label="GitHub Repository">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">Build Games with <span class="gradient-text">Xi Engine</span></h1>
+                <p class="hero-subtitle">A modern C++ game engine with Entity Component System, Lua scripting, and an integrated editor built for learning and experimentation.</p>
+                <div class="hero-buttons">
+                    <a href="tutorial.html" class="btn btn-large btn-primary">Read Documentation</a>
+                    <a href="#features" class="btn btn-large btn-secondary">Explore Features</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-number">C++</div>
+                        <div class="stat-label">Modern Standard</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">ECS</div>
+                        <div class="stat-label">Architecture</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">Lua</div>
+                        <div class="stat-label">Scripting</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">OpenGL</div>
+                        <div class="stat-label">Rendering</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="code-window">
+                    <div class="window-header">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                        <span class="window-title">main.cpp</span>
+                    </div>
+                    <div class="window-content">
+                        <pre><code><span class="keyword">class</span> <span class="class">MyGame</span> : <span class="keyword">public</span> Xi::Application {
+<span class="keyword">public</span>:
+    <span class="keyword">void</span> <span class="function">OnInit</span>() <span class="keyword">override</span> {
+        <span class="comment">// Create player entity</span>
+        Entity player = GetWorld().<span class="function">CreateEntity</span>(<span class="string">"Player"</span>);
+        <span class="keyword">auto</span>& transform = GetWorld().<span class="function">AddComponent</span>&lt;Transform&gt;(player);
+        <span class="keyword">auto</span>& mesh = GetWorld().<span class="function">AddComponent</span>&lt;MeshRenderer&gt;(player);
+
+        mesh.mesh = ResourceManager::<span class="function">GetMesh</span>(<span class="string">"player.obj"</span>);
+        mesh.material = ResourceManager::<span class="function">GetMaterial</span>(<span class="string">"pbr"</span>);
+    }
+};
+
+<span class="keyword">int</span> <span class="function">main</span>() {
+    MyGame game;
+    game.<span class="function">Run</span>();
+    <span class="keyword">return</span> <span class="number">0</span>;
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="engine-preview">
+        <div class="container">
+            <h2 class="section-title">Xi Engine Editor</h2>
+            <p class="section-subtitle">A complete development environment for building 3D games</p>
+
+            <div class="preview-main">
+                <img src="xi.png" alt="Xi Engine Editor Interface" class="preview-image-large">
+                <div class="preview-info">
+                    <h3>Integrated Development Environment</h3>
+                    <p>Full-featured editor with real-time viewport, scene hierarchy, component inspector, and material properties all in one place.</p>
+                </div>
+            </div>
+
+            <div class="preview-main">
+                <img src="xi-engine.png" alt="Xi Engine Script Editor" class="preview-image-large">
+                <div class="preview-info">
+                    <h3>Live Lua Scripting</h3>
+                    <p>Write and test gameplay code in real-time with syntax highlighting and hot reloading support.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">Powerful Features</h2>
+            <p class="section-subtitle">Everything you need to build modern games</p>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>Entity Component System</h3>
+                    <p>Data-oriented ECS architecture with cache-friendly component storage, fast queries, and efficient iteration patterns for maximum performance.</p>
+                    <ul class="feature-list">
+                        <li>Packed component arrays</li>
+                        <li>O(1) entity lookups</li>
+                        <li>Variadic template queries</li>
+                        <li>Entity hierarchies</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon-img">
+                        <img src="lua.png" alt="Lua" class="lua-logo">
+                    </div>
+                    <h3>Lua Scripting</h3>
+                    <p>Full Lua scripting support for gameplay logic with native C++ bindings. Write game behavior without recompiling the engine.</p>
+                    <ul class="feature-list">
+                        <li>Lua syntax support</li>
+                        <li>Entity & component access</li>
+                        <li>Input handling</li>
+                        <li>Syntax highlighting editor</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon-img">
+                        <img src="opengl_logo.png" alt="OpenGL" class="opengl-logo">
+                    </div>
+                    <h3>OpenGL Renderer</h3>
+                    <p>Modern OpenGL 4.5 rendering pipeline with PBR materials, dynamic lighting, and shader-based rendering.</p>
+                    <ul class="feature-list">
+                        <li>PBR material workflow</li>
+                        <li>Multiple light types</li>
+                        <li>Texture mapping support</li>
+                        <li>Render queue sorting</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Physics System</h3>
+                    <p>Complete physics simulation with collision detection, rigid body dynamics, and collision callbacks for interactive gameplay.</p>
+                    <ul class="feature-list">
+                        <li>AABB & sphere collision</li>
+                        <li>Rigid body dynamics</li>
+                        <li>Raycasting support</li>
+                        <li>Collision callbacks</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3>3D Audio</h3>
+                    <p>Spatial audio system with 3D positioning, distance attenuation, and listener orientation using MiniAudio backend.</p>
+                    <ul class="feature-list">
+                        <li>3D positional audio</li>
+                        <li>Distance attenuation</li>
+                        <li>Volume & pitch control</li>
+                        <li>Looping support</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Integrated Editor</h3>
+                    <p>Full-featured ImGui-based editor with scene hierarchy, component inspector, viewport, and script editor with syntax highlighting.</p>
+                    <ul class="feature-list">
+                        <li>Scene hierarchy</li>
+                        <li>Component inspector</li>
+                        <li>Real-time viewport</li>
+                        <li>Script editor</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="architecture" class="architecture">
+        <div class="container">
+            <h2 class="section-title">Modern Architecture</h2>
+            <p class="section-subtitle">Built with best practices and cutting-edge C++</p>
+
+            <div class="architecture-visual">
+                <div class="arch-flow">
+                    <div class="arch-column">
+                        <div class="arch-section application">
+                            <div class="arch-section-header">
+                                <h3>Application Layer</h3>
+                            </div>
+                            <div class="arch-items">
+                                <span>Window Management</span>
+                                <span>Input System</span>
+                                <span>Time & Loop</span>
+                                <span>Logging</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="arch-column">
+                        <div class="arch-section ecs">
+                            <div class="arch-section-header">
+                                <h3>ECS Core</h3>
+                            </div>
+                            <div class="arch-items">
+                                <span class="highlight">World</span>
+                                <span class="highlight">Entities</span>
+                                <span class="highlight">Components</span>
+                                <span class="highlight">Systems</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="arch-column">
+                        <div class="arch-section systems">
+                            <div class="arch-section-header">
+                                <h3>Engine Systems</h3>
+                            </div>
+                            <div class="arch-items">
+                                <span>Renderer</span>
+                                <span>Physics</span>
+                                <span>Audio</span>
+                                <span>Scripting</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="arch-column">
+                        <div class="arch-section tools">
+                            <div class="arch-section-header">
+                                <h3>Editor & Tools</h3>
+                            </div>
+                            <div class="arch-items">
+                                <span>Scene Hierarchy</span>
+                                <span>Inspector</span>
+                                <span>Script Editor</span>
+                                <span>Console</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tech-stack">
+                <h3>Technology Stack</h3>
+                <div class="tech-grid">
+                    <div class="tech-item">
+                        <strong>C++</strong>
+                        <span>Modern C++ standard</span>
+                    </div>
+                    <div class="tech-item">
+                        <strong>OpenGL 4.5</strong>
+                        <span>Graphics rendering</span>
+                    </div>
+                    <div class="tech-item">
+                        <strong>GLFW</strong>
+                        <span>Window & input</span>
+                    </div>
+                    <div class="tech-item">
+                        <strong>GLM</strong>
+                        <span>Math library</span>
+                    </div>
+                    <div class="tech-item">
+                        <strong>Dear ImGui</strong>
+                        <span>Editor interface</span>
+                    </div>
+                    <div class="tech-item">
+                        <strong>MiniAudio</strong>
+                        <span>Audio engine</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="showcase" class="showcase">
+        <div class="container">
+            <h2 class="section-title">What You Can Build</h2>
+            <p class="section-subtitle">Everything you need to create interactive 3D experiences</p>
+
+            <div class="feature-highlights">
+                <div class="highlight-item">
+                    <h4>ECS Architecture</h4>
+                    <p>Data-oriented design with efficient component storage and fast entity queries</p>
+                </div>
+                <div class="highlight-item">
+                    <h4>Material System</h4>
+                    <p>PBR materials with metallic-roughness workflow and texture mapping</p>
+                </div>
+                <div class="highlight-item">
+                    <h4>Physics Simulation</h4>
+                    <p>Collision detection with box and sphere colliders and rigid body dynamics</p>
+                </div>
+                <div class="highlight-item">
+                    <h4>3D Audio</h4>
+                    <p>Spatial audio with positional sound sources and distance attenuation</p>
+                </div>
+            </div>
+
+            <div class="cta">
+                <h3>Ready to start building?</h3>
+                <p>Explore the documentation and learn how each system works</p>
+                <a href="tutorial.html" class="btn btn-large btn-primary">View Documentation</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Xi Engine</h4>
+                    <p>A modern C++ game engine built for learning and production.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="tutorial.html">Documentation</a></li>
+                        <li><a href="https://github.com/essam-tobgi-dev/Xi-Engine">GitHub</a></li>
+                        <li><a href="tutorial.html#getting-started">Getting Started</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Learn</h4>
+                    <ul>
+                        <li><a href="tutorial.html#ecs">ECS Tutorial</a></li>
+                        <li><a href="tutorial.html#scripting">Scripting Guide</a></li>
+                        <li><a href="tutorial.html#renderer">Renderer Guide</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Xi Engine. Built using C++</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
